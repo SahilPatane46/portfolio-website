@@ -1,19 +1,48 @@
-// Form submission handler for contact form
-document.getElementById('contact-form').addEventListener('submit', function(e) {
-  e.preventDefault(); // Prevents the default form submission
+document.getElementById('contact-form').addEventListener('submit', function (event) {
+  event.preventDefault();
 
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const message = document.getElementById('message').value;
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
 
-  if (name && email && message) {
-    alert('Thank you for your message, ' + name + '! I will get back to you soon.');
-    // You could add an actual email submission here using an API (e.g., emailJS or a server endpoint)
-    document.getElementById('contact-form').reset(); // Clear the form
-  } else {
-    alert('Please fill out all fields.');
+  if (!name) {
+    showPopup('Please enter your name.');
+    return;
   }
+
+  if (!validateEmail(email)) {
+    showPopup('Please enter a valid email address.');
+    return;
+  }
+
+  if (!message) {
+    showPopup('Please enter your message.');
+    return;
+  }
+
+  // If everything is valid
+  showPopup('Message sent successfully!');
 });
+
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function showPopup(message) {
+  const popup = document.getElementById('popup-message');
+  const popupText = document.getElementById('popup-text');
+
+  popupText.textContent = message;
+  popup.style.display = 'flex'; // Show the popup
+}
+
+function closePopup() {
+  const popup = document.getElementById('popup-message');
+  popup.style.display = 'none'; // Hide the popup
+}
+
+
 
 // Smooth scroll for navigation links
 const navLinks = document.querySelectorAll('nav ul li a');
